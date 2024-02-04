@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
 const UserModel = require('./models/User.model');
+const User = require('./models/User.model');
 
 const router = Router();
 
@@ -28,6 +29,24 @@ router.post('/register', async (req, res) => {
 
 router.get('/login', async (req, res) => {
   res.render('login');
+});
+
+router.post('/login', async (req, res) => {
+  console.log('req.body', req.body);
+  // 1- Check if email and password exists in DB
+  const user = await User.findOne({
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  if (user) {
+    // Cookies(key), Session
+    // req.session
+    // req.cookies
+    res.render('index', { message: 'Login Successful', userName: user.name });
+  } else {
+    res.render('index', { message: 'Incorrect Email or Password' });
+  }
 });
 
 module.exports = router;
