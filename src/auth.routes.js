@@ -6,7 +6,17 @@ const User = require('./models/User.model');
 const router = Router();
 
 router.get('/', async (req, res) => {
-  res.render('index');
+  // TODO:
+  // console.log(req.cookies);
+  // console.log(req.session.cookie);
+  if (req.session.userId) {
+    const user = await User.findOne({ _id: req.session.userId });
+
+    res.render('index', { user });
+  } else {
+    // res.redirect('/login');
+    res.render('index');
+  }
 });
 
 router.get('/register', async (req, res) => {
@@ -23,8 +33,7 @@ router.post('/register', async (req, res) => {
 
   await u.save();
 
-  console.log('Form Submitted');
-  res.render('index', { message: 'Form Submitted' });
+  res.redirect('/login');
 });
 
 router.get('/login', async (req, res) => {
@@ -40,13 +49,17 @@ router.post('/login', async (req, res) => {
   });
 
   if (user) {
-    // Cookies(key), Session
-    // req.session
-    // req.cookies
-    res.render('index', { message: 'Login Successful', userName: user.name });
+    // Session, Cookies(key)
+    req.session.userId = user._id;
+    res.redirect('/');
   } else {
-    res.render('index', { message: 'Incorrect Email or Password' });
+    res.redirect('/login');
   }
+});
+
+router.get('/logout', async (req, res) => {
+  req.session.userId = null;
+  res.redirect('/');
 });
 
 module.exports = router;

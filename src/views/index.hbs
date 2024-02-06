@@ -1,20 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>Authentication System</title>
-</head>
-<body>
+  </head>
+  <body>
     <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/register">Register</a></li>
-            <li><a href="/login">Login</a></li>
-        </ul>
+      <ul>
+        <li><a href='/'>Home</a></li>
+        <li><a href='/register'>Register</a></li>
+        <li><a href='/login'>Login</a></li>
+        {{#if user}}
+          <li><a href='/logout'>Logout</a></li>
+        {{/if}}
+      </ul>
     </nav>
-    <p>{{message}}</p>
-    <p>{{userName}}</p>
     <h1>Authentication System - Home</h1>
-</body>
+    {{#if user}}
+      <div>
+        <p>Name : {{user.name}}</p>
+        <p>Email : {{user.email}}</p>
+      </div>
+    {{/if}}
+  </body>
 </html>
